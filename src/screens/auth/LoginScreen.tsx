@@ -12,7 +12,7 @@ import {
   School,
   User,
 } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -25,7 +25,6 @@ import {
   View,
 } from "react-native";
 
-import { ErrorState } from "@/components/ErrorState";
 import { ThemedView } from "@/components/themed-view";
 import { COLORS, SHADOWS, SIZES } from "@/constants/theme";
 import { useAuth } from "@/context/AuthContext";
@@ -63,6 +62,24 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [serverError, setServerError] = useState("");
+  useEffect(() => {
+    async function loadStoredData() {
+      try {
+        const savedAnnee = await AsyncStorage.getItem("anneeScolaire");
+        const savedecole = await AsyncStorage.getItem("ecole");
+        if (savedAnnee !== null) {
+          setAnneeScolaire(savedAnnee);
+        }
+        if (savedecole !== null) {
+          setEcole(savedecole);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la lecture d'AsyncStorage", error);
+      }
+    }
+
+    loadStoredData();
+  }, []);
   const loginMutation = useMutation({
     mutationFn: () =>
       authService.login({
@@ -81,7 +98,9 @@ const LoginScreen = () => {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
         if (status === 401 || status === 422) {
-          setServerError("École, année scolaire ou mot de passe incorrect.");
+          setServerError(
+            error.message || "Nom d'utilisateur ou mot de passe incorrect.",
+          );
         } else if (!error.response) {
           setServerError("Impossible de joindre le serveur.");
         } else {
@@ -128,18 +147,6 @@ const LoginScreen = () => {
   };
 
   const isLoading = loginMutation.isPending;
-  if (loginMutation.isError) {
-    const isNetwork =
-      loginMutation.error.message === "NETWORK_ERROR" || !loginMutation.error;
-
-    return (
-      <ErrorState
-        isNetworkError={isNetwork}
-        message={loginMutation.error.message}
-        onRetry={() => window.location.reload()}
-      />
-    );
-  }
 
   return (
     <ThemedView style={styles.container}>
@@ -218,7 +225,7 @@ const LoginScreen = () => {
           )}
 
           {/* Username */}
-          <Text style={styles.label}>Nom de l'utilisateur</Text>
+          <Text style={styles.label}>Nom d'utilisateur</Text>
           <View
             style={[styles.inputWrapper, errors.username && styles.inputError]}
           >

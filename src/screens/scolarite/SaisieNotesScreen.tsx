@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 
+import { ErrorState } from "@/components/ErrorState";
 import ThemeEmptyData from "@/components/theme-empty-data";
 import ThemeHarder from "@/components/theme-hearder";
 import ThemedSearchBar from "@/components/theme-search-box";
@@ -42,7 +43,13 @@ export default function SaisieNotesScreen() {
   const navigation = useNavigation<ScolariteStackNavigationProp>();
   const route = useRoute();
   const { noteForm } = route.params as { noteForm: NoteForm };
-  const { data: students = [], isLoading: loading } = useQuery({
+  const {
+    data: students = [],
+    isLoading: loading,
+    error,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ["eleves", noteForm.classeId, noteForm.annee],
     queryFn: async () => {
       try {
@@ -193,6 +200,19 @@ export default function SaisieNotesScreen() {
       }
     } catch (error) {}
   };
+
+  if (isError) {
+    // On détecte si c'est une erreur réseau ou autre
+    const isNetwork = error?.message === "NETWORK_ERROR" || !error;
+
+    return (
+      <ErrorState
+        isNetworkError={isNetwork}
+        message={error?.message}
+        onRetry={() => refetch()}
+      />
+    );
+  }
 
   const renderEleve = ({ item, index }: { item: Eleve; index: number }) => {
     return (

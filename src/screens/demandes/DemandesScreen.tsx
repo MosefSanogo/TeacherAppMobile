@@ -22,7 +22,6 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-
 const formated: Record<string, string> = {
   absence: "Demande d'absence",
   document: "Demande de document",
@@ -58,7 +57,6 @@ const DemandesScreen = () => {
         );
         return data;
       } catch (error) {
-        console.error("Erreur lors de la récupération des demandes :", error);
         return [];
       }
     },
@@ -96,7 +94,7 @@ const DemandesScreen = () => {
 
   if (isError) {
     // On détecte si c'est une erreur réseau ou autre
-    const isNetwork = error.message === "NETWORK_ERROR" || !error;
+    const isNetwork = error.message === "NETWORK_ERROR";
 
     return (
       <ErrorState

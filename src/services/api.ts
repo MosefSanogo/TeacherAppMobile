@@ -3,7 +3,7 @@ import NetInfo from "@react-native-community/netinfo";
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://192.168.1.218:4000/api",
+  baseURL: "http://192.168.1.218:5000/api",
 });
 
 // Intercepteur : s'exécute automatiquement AVANT chaque requête HTTP
