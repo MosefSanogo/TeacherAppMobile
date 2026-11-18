@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import {
   CalendarDays,
   Eye,
@@ -29,6 +28,7 @@ import { ThemedView } from "@/components/themed-view";
 import { COLORS, SHADOWS, SIZES } from "@/constants/theme";
 import { useAuth } from "@/context/AuthContext";
 import authService from "@/services/auth.service";
+import { handleApiError } from "@/utils/handleApiError";
 const ANNEE_REGEX = /^\d{4}-\d{4}$/;
 
 // "20252026" -> "2025-2026"
@@ -73,9 +73,7 @@ const LoginScreen = () => {
         if (savedecole !== null) {
           setEcole(savedecole);
         }
-      } catch (error) {
-        console.error("Erreur lors de la lecture d'AsyncStorage", error);
-      }
+      } catch (error) {}
     }
 
     loadStoredData();
@@ -95,22 +93,9 @@ const LoginScreen = () => {
       }
     },
     onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status;
-        if (status === 401 || status === 422) {
-          setServerError(
-            error.message || "Nom d'utilisateur ou mot de passe incorrect.",
-          );
-        } else if (!error.response) {
-          setServerError("Impossible de joindre le serveur.");
-        } else {
-          setServerError(
-            error.response?.data?.message ?? "Une erreur est survenue.",
-          );
-        }
-      } else {
-        setServerError("Une erreur est survenue.");
-      }
+      const apiError = handleApiError(error);
+
+      setServerError(apiError.message);
     },
   });
 

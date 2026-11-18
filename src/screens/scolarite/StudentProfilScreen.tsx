@@ -28,6 +28,7 @@ import { ThemedView } from "@/components/themed-view";
 import { COLORS, SHADOWS, SIZES } from "@/constants/theme";
 import { ScolariteStackNavigationProp } from "@/navigation/stacks/ScolariteStack";
 import studentService from "@/services/student.service";
+import { handleApiError } from "@/utils/handleApiError";
 
 type RouteParams = {
   idEleve: number;
@@ -122,7 +123,11 @@ const StudentProfilScreen = () => {
       );
     },
     onError: (error) => {
-      Alert.alert("Erreur", "Impossible de supprimer cette absence.");
+      const apiError = handleApiError(error);
+      Alert.alert(
+        "Erreur",
+        apiError.message || "Une erreur est survenue lors de la suppression.",
+      );
     },
   });
 

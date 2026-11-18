@@ -51,15 +51,12 @@ const DemandesScreen = () => {
   } = useQuery({
     queryKey: ["demandes", Number(userInfo?.id)],
     queryFn: async () => {
-      try {
-        const data: DemandeType[] = await demandeService.getProfDemandes(
-          Number(userInfo?.id),
-        );
-        return data;
-      } catch (error) {
-        return [];
-      }
+      const data: DemandeType[] = await demandeService.getProfDemandes(
+        Number(userInfo?.id),
+      );
+      return data;
     },
+    enabled: !!userInfo?.id,
   });
 
   const dataFormated = useMemo(() => {

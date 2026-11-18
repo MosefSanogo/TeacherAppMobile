@@ -10,42 +10,28 @@ export type ExamenType = {
   periode: string;
 };
 const getPeriode = async () => {
-  try {
-    const response = await api.get("/other/periode");
-    return response.data;
-  } catch (error) {
-    return [];
-  }
+  const response = await api.get("/other/periode");
+  return response.data;
 };
 
 const getExamen = async (
   niveau: string | undefined,
   periode: string | undefined,
 ): Promise<ExamenType[]> => {
-  try {
-    const response = await api.get<ExamenType[]>(
-      `/other/examen/${niveau}/${periode}`,
-    );
-    return response.data;
-  } catch (error) {
-    return [];
-  }
+  const response = await api.get<ExamenType[]>(
+    `/other/examen/${niveau}/${periode}`,
+  );
+  return response.data;
 };
 
 const createPresence = async (absences: any[], form: any) => {
-  try {
-    const response = await api.post("/other/absences", { absences, form });
-    return response.data;
-  } catch (error) {}
+  const response = await api.post("/other/absences", { absences, form });
+  return response.data;
 };
 
 const getPaiements = async (idProf: number) => {
-  try {
-    const response = await api.get(`/other/paiements/${idProf}`);
-    return response.data;
-  } catch (error) {
-    return [];
-  }
+  const response = await api.get(`/other/paiements/${idProf}`);
+  return response.data;
 };
 
 export default {

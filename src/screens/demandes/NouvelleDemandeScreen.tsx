@@ -31,6 +31,7 @@ import { COLORS, SHADOWS, SIZES } from "@/constants/theme";
 import { useAuth } from "@/context/AuthContext";
 import { DemandeStackNavigationProp } from "@/navigation/stacks/DemandesStack";
 import demandeService from "@/services/demande.service";
+import { handleApiError } from "@/utils/handleApiError";
 
 type DemandeType = "absence" | "document" | "administrative" | "other";
 
@@ -108,8 +109,9 @@ export default function NouvelleDemandeScreen() {
         [{ text: "OK", onPress: () => navigation.goBack() }],
       );
     },
-    onError: () => {
-      Alert.alert("Erreur", "Une erreur est survenue lors de l'envoi.");
+    onError: (error) => {
+      const apiError = handleApiError(error);
+      Alert.alert("Erreur", apiError.message || "Une erreur est survenue.");
     },
   });
 

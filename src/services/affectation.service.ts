@@ -11,12 +11,8 @@ export type AffectationType = {
 const getAffectations = async (
   id: number | string,
 ): Promise<AffectationType[]> => {
-  try {
-    const response = await api.get(`/affectations/findAll/${id}`);
-    return response.data;
-  } catch (error) {
-    return [];
-  }
+  const response = await api.get(`/affectations/findAll/${id}`);
+  return response.data;
 };
 
 export default {

@@ -12,46 +12,30 @@ const getStudents = async (
   id: number | string,
   an: string,
 ): Promise<StudentType[]> => {
-  try {
-    const response = await api.get<StudentType[]>(
-      `/students/students/${id}/${an}`,
-    );
-    return response.data;
-  } catch (error) {
-    return [];
-  }
+  const response = await api.get<StudentType[]>(
+    `/students/students/${id}/${an}`,
+  );
+  return response.data;
 };
 
 const getAdmission = async (id: number | string) => {
-  try {
-    const response = await api.get(`/students/admission/${id}`);
-    return response.data;
-  } catch (error) {}
+  const response = await api.get(`/students/admission/${id}`);
+  return response.data;
 };
 
 const getMatricule = async (id: number | string) => {
-  try {
-    const response = await api.get(`/students/matricule/${id}`);
-    return response.data;
-  } catch (error) {
-    return [];
-  }
+  const response = await api.get(`/students/matricule/${id}`);
+  return response.data;
 };
 
 const getPresence = async (id: number | string, an: string) => {
-  try {
-    const response = await api.get(`/students/presence/${id}/${an}`);
-    return response.data;
-  } catch (error) {
-    return [];
-  }
+  const response = await api.get(`/students/presence/${id}/${an}`);
+  return response.data;
 };
 
 const deletePresence = async (id: number | string) => {
-  try {
-    const response = await api.delete(`/students/delete/presence/${id}`);
-    return response.data;
-  } catch (error) {}
+  const response = await api.delete(`/students/delete/presence/${id}`);
+  return response.data;
 };
 
 export default {

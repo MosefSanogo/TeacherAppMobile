@@ -50,7 +50,6 @@ const HomeScreen = () => {
       try {
         return await emploiService.getTodayEmploi(Number(userInfo?.id), annee);
       } catch (error) {
-        console.log(error);
         return [];
       }
     },

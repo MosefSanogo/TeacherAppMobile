@@ -21,6 +21,7 @@ import { ThemedView } from "@/components/themed-view";
 import { COLORS, SHADOWS, SIZES } from "@/constants/theme";
 import { ScolariteStackNavigationProp } from "@/navigation/stacks/ScolariteStack";
 import noteService from "@/services/note.service";
+import { handleApiError } from "@/utils/handleApiError";
 
 const NOTE_SUR = 20; // la requête ne renvoie pas le barème : on suppose /20
 
@@ -113,7 +114,11 @@ const ResultatEleveScreen = () => {
       setEditing(null);
     },
     onError: (error) => {
-      Alert.alert("Erreur", "Impossible de modifier la note.");
+      const apiError = handleApiError(error);
+      Alert.alert(
+        "Erreur",
+        apiError.message || "Une erreur est survenue lors de la mise à jour.",
+      );
     },
   });
 
